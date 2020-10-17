@@ -13,38 +13,55 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import github.io.somesh.app.message.MessagePublisher;
 
+/**
+ * 
+ * @author iamso
+ *
+ */
 @WebMvcTest(TestController.class)
 @ExtendWith(SpringExtension.class)
 public class TestControllerTest {
-	
-	@Autowired
-	private MockMvc mvc;
-	
-	@MockBean
-	private MessagePublisher publisher; 
-	
-	@Test
-	public void validateWelcomeResponse() throws Exception {
-		//mvc.perform(GET())
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/hello");
-		mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
-			
-	}
-	
-	@Test
-	public void inValidResponse() throws Exception {
-		//mvc.perform(GET())
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/temp");
-		mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isNotFound());
-			
-	}
-	
-	@Test
+
+  @Autowired
+  private MockMvc mvc;
+
+  @MockBean
+  private MessagePublisher publisher;
+
+  /**
+   * 
+   * @throws Exception
+   */
+  @Test
+  public void validateWelcomeResponse() throws Exception {
+    // mvc.perform(GET())
+    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/hello");
+    mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
+
+  }
+
+  /**
+   * 
+   * @throws Exception
+   */
+  @Test
+  public void inValidResponse() throws Exception {
+    // mvc.perform(GET())
+    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/temp");
+    mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isNotFound());
+
+  }
+
+  /**
+   * 
+   * @throws Exception
+   */
+  @Test
   public void publish() throws Exception {
-    //mvc.perform(GET())
+    // mvc.perform(GET())
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/publish/message");
     mvc.perform(builder);
     Mockito.verify(publisher).publish("message");
-      
+
   }
 }
