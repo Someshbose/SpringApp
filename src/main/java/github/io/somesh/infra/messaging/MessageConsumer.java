@@ -1,13 +1,15 @@
-package github.io.somesh.app.message;
+package github.io.somesh.infra.messaging;
 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Message Consumer class.
  * 
  * @author sombose
  */
+@Slf4j
 @Component
 public class MessageConsumer {
   /**
@@ -16,8 +18,7 @@ public class MessageConsumer {
    * @param message String
    */
   @KafkaListener(topics = "sample-topic", id = "consumer-1")
-  @SuppressWarnings("Regexp")
   public void consumeMessage(String message) {
-    System.out.println("Message Consumed is" + message);
+    log.info("Message Consumed is {}", message);
   }
 }

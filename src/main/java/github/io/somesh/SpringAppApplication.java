@@ -2,6 +2,7 @@ package github.io.somesh;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Main SpringApp APplication.
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author sombose
  */
 
+@Slf4j
 @SpringBootApplication
 @SuppressWarnings("HideUtilityClassConstructor")
 public class SpringAppApplication {
@@ -20,7 +22,7 @@ public class SpringAppApplication {
    */
   public static void main(String[] args) {
     SpringApplication.run(SpringAppApplication.class, args);
-
+    log.info("File Uploader Application has started successfully.");
   }
 
 }
