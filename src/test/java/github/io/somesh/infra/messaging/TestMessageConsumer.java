@@ -1,4 +1,4 @@
-package github.io.somesh.app.message;
+package github.io.somesh.infra.messaging;
 
 public class TestMessageConsumer {
   /*

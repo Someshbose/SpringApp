@@ -8,10 +8,10 @@
 		<version>2.3.5.BUILD-SNAPSHOT</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>github.io</groupId>
-	<artifactId>somesh</artifactId>
+	<groupId>somesh.github.io</groupId>
+	<artifactId>FileUploader</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>SpringApp</name>
+	<name>FileUploader</name>
 	<description>FileUploader App</description>
 
 	<properties>
@@ -52,6 +52,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <version>1.18.12</version>
+		    <scope>provided</scope>
+		</dependency>		        
 		<dependency>
 		    <groupId>org.springframework.kafka</groupId>
 		    <artifactId>spring-kafka</artifactId>
@@ -74,10 +81,11 @@
 		   	</exclusion>
 		   </exclusions>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.4</version>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.11</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

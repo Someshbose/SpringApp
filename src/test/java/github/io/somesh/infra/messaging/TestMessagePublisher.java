@@ -1,4 +1,4 @@
-package github.io.somesh.app.message;
+package github.io.somesh.infra.messaging;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +13,7 @@ import org.springframework.messaging.Message;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.SettableListenableFuture;
+import github.io.somesh.infra.messaging.MessagePublisher;
 
 /**
  * 
