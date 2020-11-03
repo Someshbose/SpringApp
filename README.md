@@ -1,5 +1,5 @@
 # SpringApp -FileUploader
-[![Build Status](https://travis-ci.org/Someshbose/SpringApp.svg?branch=master)](https://travis-ci.org/Someshbose/SpringApp)
+[![Build Status](https://travis-ci.org/Someshbose/FileUploader.svg?branch=development)](https://travis-ci.org/Someshbose/FileUploader)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A Microservice to upload file.
