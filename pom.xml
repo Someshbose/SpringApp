@@ -9,13 +9,14 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>somesh.github.io</groupId>
-	<artifactId>FileUploader</artifactId>
+	<artifactId>file-uploader</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>FileUploader</name>
 	<description>FileUploader App</description>
-
+	<packaging>jar</packaging>
 	<properties>
 		<java.version>11</java.version>
+		<docker.image.prefix>somesh.io</docker.image.prefix>
 	</properties>
 
 	<dependencies>
@@ -107,29 +108,81 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.1.2</version>
+				<configuration>
+					<finalName>${project.artifactId}-${version.number}</finalName>
+					<archive>
+						<manifestEntries>
+							<Implementation-Version>${version.number}</Implementation-Version>
+						</manifestEntries>
+					</archive>
+				</configuration>
 			</plugin>
 			<plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>3.0.0</version>
-            <configuration>
-            	<failsOnError>true</failsOnError>
-                <configLocation>src/main/resources/checkstyle.xml</configLocation>
-                <consoleOutput>true</consoleOutput>
-            </configuration>
-            <executions>
-            	<execution>
-            		<id>validate</id>
-            		<phase>validate</phase>
-            		<goals>
-						<goal>check</goal>
-					</goals>
-            	</execution>
-            </executions>
-            
-        </plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-info</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-checkstyle-plugin</artifactId>
+	            <version>3.0.0</version>
+	            <configuration>
+	            	<failsOnError>true</failsOnError>
+	                <configLocation>src/main/resources/checkstyle.xml</configLocation>
+	                <consoleOutput>true</consoleOutput>
+	            </configuration>
+	            <executions>
+	            	<execution>
+	            		<id>validate</id>
+	            		<phase>validate</phase>
+	            		<goals>
+							<goal>check</goal>
+						</goals>
+	            	</execution>
+	            </executions>
+	            
+	        </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.1.1</version>
+				<executions>
+					<execution>
+						<id>unpack</id>
+						<phase>package</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+	         <groupId>com.spotify</groupId>
+	         <artifactId>dockerfile-maven-plugin</artifactId>
+	         <version>1.4.10</version>
+	         
+	         <configuration>
+	            <repository>${docker.image.prefix}/${project.artifactId}</repository>
+	         </configuration>
+	      </plugin>
 		</plugins>
 	</build>
 
@@ -150,6 +203,11 @@
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
+			<id>cetral</id>
+			<name>Maven repos</name>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</pluginRepository>
+		<pluginRepository>
 			<id>spring-milestones</id>
 			<name>Spring Milestones</name>
 			<url>https://repo.spring.io/milestone</url>
@@ -161,7 +219,7 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-		</pluginRepository>
+		</pluginRepository> 
 	</pluginRepositories>
 
 </project>
