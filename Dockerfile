@@ -1,4 +1,6 @@
 FROM openjdk:11
+#WORKDIR /home/travis/build/Someshbose/FileUploader/
+RUN pwd
 ARG DEPENDENCY=target/dependency
 COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY ${DEPENDENCY}/META-INF /app/META-INF
