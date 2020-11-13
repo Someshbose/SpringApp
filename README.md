@@ -17,21 +17,17 @@ mvn package dockerfile:build
 To run the app in local 
 ---
 - Run kafka in local(optional)
-localhost:9092 - default kafka 
+localhost:9092 - default kafka
+
+For additional kafka command details click [here](https://github.com/Someshbose/SpringApp/tree/development/kafka-commands)
+
 - start the application
 * through dockerImage itself.
 * importing the project and running through ide.
-- You can see welcome message on following url.
-```sh
-http://localhost:8080/app/service/hello
-```
+
 - For more information related to application.
 ```sh
 http://localhost:8080/app/service/actuator
-```
-- For Publishing something on kafka. You can see the output on console itself.
-```sh
-http://localhost:8080/app/service/mesaage/<msg payload>
 ```
 
 - h2 db embedded console can be found on below url.
@@ -58,6 +54,23 @@ body:
 - File Uploader get url.
 ```sh
 localhost:8080/app/service/findbyId/<ref-id>
+```
+
+- After file successfully Uploaded we will see a Message on kafka topic fileUploaded-notify
+
+- File Status Consumer Message template on topic filestatus 
+
+```sh
+{
+   "eventName":null,
+   "eventDate":"2020-11-13T07:32:46.869779Z",
+   "fileLocation":"88e437117577455a9d90049cab1d69a7",
+   "fileName":"somesh.txt",
+   "fileTypeCode":"ResultType",
+   "status":"PROCESSED",
+   "serviceName":"FileUploaderConsumer"
+}
+
 ```
 
 - Contributions guideline-

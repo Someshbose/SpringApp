@@ -1,10 +1,13 @@
 package github.io.somesh.app.service;
 
 import java.io.UnsupportedEncodingException;
+import java.time.Instant;
 import java.util.Optional;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 import github.io.somesh.app.dto.FileStoreDto;
+import github.io.somesh.app.service.messaging.FileUploadedMesageEvent;
+import github.io.somesh.app.service.messaging.FileUploadedMessagePublisher;
 import github.io.somesh.domain.model.FileStore;
 import github.io.somesh.domain.repo.FileStoreRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -18,15 +21,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FileStoreServiceImpl implements FileStoreService {
 
-  private FileStoreRepository repository;
+  private final FileStoreRepository repository;
+  private final FileUploadedMessagePublisher publisher;
 
   /**
    * Constructor for FileStoreRepository.
    * 
    * @param repository FileStoreRepository
+   * @param publisher FileUploadedMessagePublisher
    */
-  public FileStoreServiceImpl(FileStoreRepository repository) {
+  public FileStoreServiceImpl(FileStoreRepository repository, FileUploadedMessagePublisher publisher) {
     this.repository = repository;
+    this.publisher = publisher;
   }
 
   @Override
@@ -34,7 +40,20 @@ public class FileStoreServiceImpl implements FileStoreService {
     validatePayload(dto);
     FileStore entity = createEntityFromDto(dto);
     repository.save(entity);
+    FileUploadedMesageEvent msgEvent = createMessageEvent(entity);
+    publisher.publish(msgEvent.getEventName(), msgEvent);
     return entity.getFileReferenceId();
+  }
+
+  /**
+   * Create MessageEvent from Entity.
+   * 
+   * @param entity FileStore
+   * @return FileUploadedMesageEvent
+   */
+  private FileUploadedMesageEvent createMessageEvent(FileStore entity) {
+    return FileUploadedMesageEvent.builder().eventDate(Instant.now()).fileLocation(entity.getFileReferenceId())
+        .fileName(entity.getFileName()).uploadedBy(entity.getSubmitterEmail()).build();
   }
 
   /**
