@@ -163,7 +163,7 @@ public class FileStore extends AbstractBaseEntity<FileStore> {
     }
 
     private void validate() {
-      Validate.notBlank(fileReferenceId, "file ref must not be blank");
+      //Validate.notBlank(fileReferenceId, "file ref must not be blank");
       Validate.notBlank(fileTypeCode, "file Type must not be blacnk");
     }
 

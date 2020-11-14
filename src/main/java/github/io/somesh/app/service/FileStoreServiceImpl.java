@@ -1,12 +1,10 @@
 package github.io.somesh.app.service;
 
 import java.io.UnsupportedEncodingException;
-import java.time.Instant;
 import java.util.Optional;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 import github.io.somesh.app.dto.FileStoreDto;
-import github.io.somesh.app.service.messaging.FileUploadedMesageEvent;
 import github.io.somesh.app.service.messaging.FileUploadedMessagePublisher;
 import github.io.somesh.domain.model.FileStore;
 import github.io.somesh.domain.repo.FileStoreRepository;
@@ -40,20 +38,13 @@ public class FileStoreServiceImpl implements FileStoreService {
     validatePayload(dto);
     FileStore entity = createEntityFromDto(dto);
     repository.save(entity);
-    FileUploadedMesageEvent msgEvent = createMessageEvent(entity);
-    publisher.publish(msgEvent.getEventName(), msgEvent);
+    publisher.publish(entity);
     return entity.getFileReferenceId();
   }
 
-  /**
-   * Create MessageEvent from Entity.
-   * 
-   * @param entity FileStore
-   * @return FileUploadedMesageEvent
-   */
-  private FileUploadedMesageEvent createMessageEvent(FileStore entity) {
-    return FileUploadedMesageEvent.builder().eventDate(Instant.now()).fileLocation(entity.getFileReferenceId())
-        .fileName(entity.getFileName()).uploadedBy(entity.getSubmitterEmail()).build();
+  @Override
+  public Optional<FileStore> getFile(String fileRefId) {
+    return repository.findByFileReferenceId(fileRefId);
   }
 
   /**
@@ -63,7 +54,6 @@ public class FileStoreServiceImpl implements FileStoreService {
    * @return FileStore
    */
   private FileStore createEntityFromDto(FileStoreDto dto) {
-    // TODO Auto-generated method stub
     String fileExtension = getFileExtension(dto.getFileName());
     FileStore entity = null;
     try {
@@ -112,8 +102,4 @@ public class FileStoreServiceImpl implements FileStoreService {
     }
   }
 
-  @Override
-  public Optional<FileStore> getFile(String fileRefId) {
-    return repository.findByFileReferenceId(fileRefId);
-  }
 }
