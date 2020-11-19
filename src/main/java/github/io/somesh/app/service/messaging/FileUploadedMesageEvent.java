@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public final class FileUploadedMesageEvent implements MessageEvent {
 
+  @Builder.Default
   private String eventName = FileUploadedMesageEvent.class.getSimpleName();
 
   @JsonSerialize(using = InstantSerializer.class)
