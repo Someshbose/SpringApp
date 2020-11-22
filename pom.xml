@@ -18,7 +18,24 @@
 		<java.version>11</java.version>
 		<docker.image.prefix>somesh.io</docker.image.prefix>
 	</properties>
-
+	<!-- Maven profiles -->
+	<profiles>
+		<profile>
+			<id>development</id>
+			<properties>
+			<dependency.scope>runtime</dependency.scope>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+			<dependency.scope>test</dependency.scope>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+	</profiles>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -41,13 +58,18 @@
 		<dependency>
 		    <groupId>com.h2database</groupId>
 		    <artifactId>h2</artifactId>
-		    <scope>runtime</scope>
+		    <scope>${dependency.scope}</scope>
 		</dependency>
 		<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <!-- live reload dependency -->
+        <dependency> 
+	        <groupId>org.springframework.boot</groupId> 
+	        <artifactId>spring-boot-devtools</artifactId> 
+	    </dependency>
+        <!--lombok dependecy -->
 		<dependency>
 		    <groupId>org.projectlombok</groupId>
 		    <artifactId>lombok</artifactId>
@@ -76,7 +98,7 @@
 		   	</exclusion>
 		   </exclusions>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+		<!-- lang3 validation dependency -->
 		<dependency>
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-lang3</artifactId>
