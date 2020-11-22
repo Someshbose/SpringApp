@@ -1,6 +1,5 @@
 package github.io.somesh.app.web;
 
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,7 +61,7 @@ public class FileStoreControllerTest {
 
   @Test
   public void testGetController() throws Exception {
-    Mockito.when(service.getFile(FILE_REF)).thenReturn(Optional.of(fileStore));
+    Mockito.when(service.getFile(FILE_REF)).thenReturn(fileStore);
     MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/findbyId/" + FILE_REF);
     mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
   }

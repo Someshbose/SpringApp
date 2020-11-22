@@ -2,10 +2,14 @@ package github.io.somesh.app.service;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 import github.io.somesh.app.dto.FileStoreDto;
+import github.io.somesh.app.service.messaging.FileStatusMessageEvent;
 import github.io.somesh.app.service.messaging.FileUploadedMessagePublisher;
+import github.io.somesh.app.shared.exception.FileUploadException;
+import github.io.somesh.app.shared.exception.ResourceNotFoundException;
 import github.io.somesh.domain.model.FileStore;
 import github.io.somesh.domain.repo.FileStoreRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +47,14 @@ public class FileStoreServiceImpl implements FileStoreService {
   }
 
   @Override
-  public Optional<FileStore> getFile(String fileRefId) {
-    return repository.findByFileReferenceId(fileRefId);
+  public FileStore getFile(String fileRefId) {
+
+    Optional<FileStore> fsStore = repository.findByFileReferenceId(fileRefId);
+    if (fsStore.isPresent()) {
+      return fsStore.get();
+    } else {
+      throw new ResourceNotFoundException("File Not Found!");
+    }
   }
 
   /**
@@ -102,4 +112,11 @@ public class FileStoreServiceImpl implements FileStoreService {
     }
   }
 
+  @Override
+  @Transactional
+  public void updateFileStatus(FileStatusMessageEvent messageEvent) {
+    FileStore opEntity = this.getFile(messageEvent.getFileLocation());
+    opEntity.updateStatus(messageEvent.getStatus());
+    repository.save(opEntity);
+  }
 }

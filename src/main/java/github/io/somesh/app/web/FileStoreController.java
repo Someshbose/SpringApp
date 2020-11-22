@@ -1,7 +1,6 @@
 package github.io.somesh.app.web;
 
 import java.net.URI;
-import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,11 +52,7 @@ public class FileStoreController {
    */
   @GetMapping("/findbyId/{id}")
   public ResponseEntity getFile(@PathVariable String id) {
-    Optional<FileStore> response = service.getFile(id);
-    if (response.isPresent()) {
+      FileStore response = service.getFile(id);
       return ResponseEntity.ok(response);
-    } else {
-      return (ResponseEntity) ResponseEntity.notFound();
-    }
   }
 }

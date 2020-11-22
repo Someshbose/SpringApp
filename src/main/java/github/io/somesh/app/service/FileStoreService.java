@@ -1,13 +1,13 @@
 package github.io.somesh.app.service;
 
-import java.util.Optional;
 import github.io.somesh.app.dto.FileStoreDto;
+import github.io.somesh.app.service.messaging.FileStatusMessageEvent;
 import github.io.somesh.domain.model.FileStore;
 
 /**
  * FileStoreService interface.
  * 
- * @author iamso
+ * @author sombose
  */
 public interface FileStoreService {
 
@@ -25,5 +25,12 @@ public interface FileStoreService {
    * @param fileRefId String.
    * @return FileStore
    */
-  Optional<FileStore> getFile(String fileRefId);
+  FileStore getFile(String fileRefId);
+
+  /**
+   * update FileStore Status.
+   * 
+   * @param messageEvent FileStatusMessageEvent
+   */
+  void updateFileStatus(FileStatusMessageEvent messageEvent);
 }

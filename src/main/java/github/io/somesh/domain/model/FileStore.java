@@ -174,7 +174,12 @@ public class FileStore extends AbstractBaseEntity<FileStore> {
 
   }
 
-  public void setStatus(FileUploadedStatus status) {
+  /**
+   * Update the status of FileStore Entity.
+   * 
+   * @param status FileUploadedStatus
+   */
+  public void updateStatus(FileUploadedStatus status) {
     this.status = status;
   }
 }
