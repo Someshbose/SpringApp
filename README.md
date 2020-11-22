@@ -24,6 +24,12 @@ For additional kafka command details click [here](https://github.com/Someshbose/
 - start the application
 * through dockerImage itself.
 * importing the project and running through ide.
+* For Maven profile(pom.xml) change the DEVELOPMENT as active instead of TEST profile.
+```sh
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+```
 
 - For more information related to application.
 ```sh

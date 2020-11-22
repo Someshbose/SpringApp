@@ -8,6 +8,8 @@
 
 - here master is the deployment branch and development is for development activity. So create/cut new branch from development.
 
+- here we are using Builder Pattern for creating object for entities and DTOs.
+
 - please follow below branch name strategy. 
 
 ```sh

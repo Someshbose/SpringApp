@@ -1,11 +1,11 @@
-package github.io.somesh.app.service;
+package github.io.somesh.app.shared.exception;
 
 /**
  * FileUploadException class.
  * 
  * @author sombose
  */
-public class FileUploadException extends RuntimeException {
+public class ResourceNotFoundException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
 
@@ -14,7 +14,7 @@ public class FileUploadException extends RuntimeException {
    * 
    * @param message String.
    */
-  public FileUploadException(final String message) {
+  public ResourceNotFoundException(final String message) {
     super(message);
   }
 }
