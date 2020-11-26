@@ -27,12 +27,18 @@ env:
   - COMMIT=${TRAVIS_COMMIT::7}
   - secure: bjbI2Dzd9/rtfiUEYa6hepvNdNIg3xFp/YS0RhrlyUIItLI2LnwWpT2tGQOyTD7x2fyamodHjGOW7N8kOEZp5UliqwMLJE8VoJ5C8S/y99ljv/DTFTnXV4PdDDDPmREqi8vFZuNkfitffWWVCUtsKVYXQVDdOJ0a38Eid8jiv1huPhRP+dAzxdFEFVFvphYw7y71QZJjid7Amw/fx8b3wuO948eCLn4bE4TyS67k3RUb3exarAzxrip/Us97H8eXILrRbvm38WRhY5XOFd+4GqYJA/229FO3PhGibPPyQ3XnAeVjSvbDaEYliIP7o4RnfDh7pK0E/VWvTLk95XUp3iOfTPC+cHjKPbdJgwZBVWwr7ALs3Chlu+OfTVlEZc+F7YWcJYPNnLTXygKqFbeS+SQAKoR8YZ+tNLKYup+ll87sekvu3Dx/p17k0XG2t0eRjLuh3eKxUG9y6B/mXV44epyCuJz+A8NmprFNPjziERTrnXqIKHJX1fxY+iK7AgPGBRjSt+VSrtNI+kV1ndFq7+fpdLXBt9i6RkDY9RU1SjJP1ZuiDuiAwSeFmTEmGEeG/49uA79Gm+4bGNpgKRWufgoLnYfjGp2e4DTgHBa/hswWhOvqc2vfzPoeIouDN1tFgFktHhJh+sRxJGDPFF5YdF5yok5bd2GJacQ3XJvvrgw=
   - secure: TKdlNrPPtsBhc1ypAFtVuW4nY4buoczPYaKI8NxXZ5abWielI44Sf3yH32VGNLLSGzsAfOv5yuW61er/L+O9oBVgz2N5ry+MhS6KMD5aumOflM5pv5axDs2zMGvEif5k9Q+MNtAzwsUjkiAJiKOIFzKDJaTp6V4E5o1qk5CUu2IJI+gHhnYCUBRU+WDrc1RRE3BxFncGuLxSzAng03DkIyj0Y4Y7kFUSnRvGieHebtwMDhb9trt7B1IUvDVF7B4q5XwhQJGZNCAV1KXWwzKC1sKiaktO6i7BNfumKLtExQfjt+yLG6cz3KgmyI3jshnSIFpcyJYLWdP9gQ3vr6bCR6Rsl8OAW4GMpmCCUnYwFKLwsffBF67R65Bt23wpD5NxKflxChiJ7pPUD8AKn5FKIMtbS1LjRU63Q5T04gysN9ERCSUvVUc5N3ANRTnTw0+IXgeq2HPcSWOZJ4JAR+xyOSV9MmP0eVz+w6YdAoW5Hf9ti4f/r9dqW0gxo1S9ws6xPfXW7T9KF1MD4b9XzLya7ti20jAqS16SDT8YOxlWI59fK0oNhF33nC2nNDKiA3hFz25Ntqro/6fNVxyxKkI4woNSaNGN1hF478KGORDDSG+hv22DRGKDcmOmYrtHCRvy80vIyIq7NQuclLQoP30/n//fEUTgr8jscZdK8UgoOCE=
+  - secure: q2GDi4kTcfwcVYqPPCbTGkCX6wBR+ik1TXYGFN1IBFxcrCc09m45SKd9px1vD0Y4FkWPNa9n4a8mpmHote+A0qeqz5/0Xu5eltrntZILIWKOfyMpX7bMVv17rsAehv8mcq+eZrOlGQCK2szbA+2DIzRfobhupg8SSGUCZeuDmuFxu0q2LkMtlODVvVriJC6OBpDXI0DvwNR/PdcHvQ0rBHkYmIGwqXQxvzRMtRF8Pxt/hgGyGmbUCDQt0lIpnBnr3uzsnL41JMCoL76x3UZ5SmnyKplj6znuqbNnxMHH3ujkho+0UCe0JqCJfnrgy5X5wvxcS35sAEjjnkc73nMOwT2T+Q6SiSr51O7n0OvPouXn7GceW4VspcguPEqOk5mrh2xqK3v0oRS61TVeMHkVhZkx6lNhXsBJLySbz5nWg0cOLYeyvpRptvtWU7vIS51vTPWUGURFmIzPycOxWrzZrVyaNkcU3UYlyYx+YtWoVEHdrusXa2twPuDoYBNj6flLe4FDuwhf/h58j0UVZAsBVSOxbP9p17aofqaWITLy4CKlp5dW3gdWNoD2kICuOQNpPyvLJLAa/mRtk70loSunOn9RnWDZepuu/vy2c1CpPIp3b1Nj87rSFnERA6m/KvFeHGJNrto/siu7CYKKCGiI14ooS83ZmOGm281J4lsc/UY=
 script:
-- ./mvnw clean package -B
+- "./mvnw clean package -B"
 after_success:
 - docker login -u $DOCKER_USER -p $DOCKER_PASS
-- export TAG=`if [ "$TRAVIS_BRANCH" == "development" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+- export TAG=`if [ "$TRAVIS_BRANCH" == "development" ]; then echo "latest"; else echo
+  $TRAVIS_BRANCH ; fi`
 - export IMAGE_NAME=sombose/file-uploader
 - docker build -t $IMAGE_NAME:$COMMIT .
 - docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:$TAG
 - docker push $IMAGE_NAME
+deploy:
+  provider: heroku
+  api_key: $HEROKU_API_KEY
+  app: polar-lowlands-35481
