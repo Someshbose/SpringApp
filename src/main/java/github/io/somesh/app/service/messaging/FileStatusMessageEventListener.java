@@ -33,6 +33,6 @@ public class FileStatusMessageEventListener {
   @KafkaListener(topics = "filestatus", id = "fileStatusConsumer")
   public void consumeMessage(FileStatusMessageEvent messageEvent) {
     log.info("Message Consumed is {}", messageEvent);
-    service.updateFileStatus(messageEvent);
+    service.updateFileStatus(messageEvent.getFileName(), messageEvent.getStatus());
   }
 }

@@ -2,17 +2,22 @@ package github.io.somesh.app.service;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Optional;
-import javax.transaction.Transactional;
+
+import github.io.somesh.app.service.messaging.FileUploadEvent;
+import github.io.somesh.domain.model.FileUploadedStatus;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import github.io.somesh.app.dto.FileStoreDto;
-import github.io.somesh.app.service.messaging.FileStatusMessageEvent;
-import github.io.somesh.app.service.messaging.FileUploadedMessagePublisher;
 import github.io.somesh.app.shared.exception.FileUploadException;
 import github.io.somesh.app.shared.exception.ResourceNotFoundException;
 import github.io.somesh.domain.model.FileStore;
 import github.io.somesh.domain.repo.FileStoreRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementation class for FileStoreService.
@@ -24,26 +29,27 @@ import lombok.extern.slf4j.Slf4j;
 public class FileStoreServiceImpl implements FileStoreService {
 
   private final FileStoreRepository repository;
-  private final FileUploadedMessagePublisher publisher;
+
+  @Autowired
+  private ApplicationEventPublisher fileConsumerEventPublisher;
 
   /**
    * Constructor for FileStoreRepository.
    * 
    * @param repository FileStoreRepository
-   * @param publisher FileUploadedMessagePublisher
    */
-  public FileStoreServiceImpl(FileStoreRepository repository, FileUploadedMessagePublisher publisher) {
+  public FileStoreServiceImpl(FileStoreRepository repository) {
     this.repository = repository;
-    this.publisher = publisher;
   }
 
   @Override
-  public String saveFile(FileStoreDto dto) {
+  @Transactional
+  public ResponseEntity saveFile(FileStoreDto dto) {
     validatePayload(dto);
     FileStore entity = createEntityFromDto(dto);
     repository.save(entity);
-    publisher.publish(entity);
-    return entity.getFileReferenceId();
+    fileConsumerEventPublisher.publishEvent(new FileUploadEvent(this, entity));
+    return ResponseEntity.ok().body(entity);
   }
 
   @Override
@@ -113,10 +119,10 @@ public class FileStoreServiceImpl implements FileStoreService {
   }
 
   @Override
-  @Transactional
-  public void updateFileStatus(FileStatusMessageEvent messageEvent) {
-    FileStore opEntity = this.getFile(messageEvent.getFileLocation());
-    opEntity.updateStatus(messageEvent.getStatus());
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public void updateFileStatus(String fileReference, FileUploadedStatus status) {
+    FileStore opEntity = this.getFile(fileReference);
+    opEntity.updateStatus(status);
     repository.save(opEntity);
   }
 }

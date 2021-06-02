@@ -3,6 +3,7 @@ package github.io.somesh;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * Main SpringApp APplication.
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
+@EnableAsync
 @SpringBootApplication
 @SuppressWarnings("HideUtilityClassConstructor")
 public class SpringAppApplication {
