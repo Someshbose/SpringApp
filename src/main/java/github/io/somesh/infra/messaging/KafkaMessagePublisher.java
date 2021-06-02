@@ -1,6 +1,7 @@
 package github.io.somesh.infra.messaging;
 
 import org.slf4j.Logger;
+import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.kafka.support.SendResult;
@@ -40,7 +41,11 @@ public interface KafkaMessagePublisher<T> {
    */
   default void publish(String messageKey, T event) {
     final Message<T> message = createMessage(event, messageKey);
-    this.getKafkaTemplate().send(message).addCallback(r -> this.onSuccess(r), ex -> this.onFailure(ex, message));
+    try {
+      this.getKafkaTemplate().send(message).addCallback(r -> this.onSuccess(r), ex -> this.onFailure(ex, message));
+    } catch (KafkaException exception) {
+      onFailure(exception, message);
+    }
   }
 
   /**

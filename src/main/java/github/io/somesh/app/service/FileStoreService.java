@@ -1,8 +1,9 @@
 package github.io.somesh.app.service;
 
 import github.io.somesh.app.dto.FileStoreDto;
-import github.io.somesh.app.service.messaging.FileStatusMessageEvent;
 import github.io.somesh.domain.model.FileStore;
+import github.io.somesh.domain.model.FileUploadedStatus;
+import org.springframework.http.ResponseEntity;
 
 /**
  * FileStoreService interface.
@@ -17,7 +18,7 @@ public interface FileStoreService {
    * @param dto FileStoreDto
    * @return String
    */
-  String saveFile(FileStoreDto dto);
+  ResponseEntity saveFile(FileStoreDto dto);
 
   /**
    * method for fetching file.
@@ -30,7 +31,8 @@ public interface FileStoreService {
   /**
    * update FileStore Status.
    * 
-   * @param messageEvent FileStatusMessageEvent
+   * @param fileReference FileStatusMessageEvent
+   * @param status FileStatus
    */
-  void updateFileStatus(FileStatusMessageEvent messageEvent);
+  void updateFileStatus(String fileReference, FileUploadedStatus status);
 }
